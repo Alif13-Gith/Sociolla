@@ -40,7 +40,6 @@ st.markdown("""
         font-family: 'Inter', sans-serif;
     }
 
-    /* ── Hero Banner ── */
     .hero {
         background: linear-gradient(135deg, #c0392b 0%, #8e1010 60%, #2c0a0a 100%);
         border-radius: 16px;
@@ -84,7 +83,6 @@ st.markdown("""
         letter-spacing: 0.5px;
     }
 
-    /* ── Metric Cards ── */
     .kpi-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -120,7 +118,6 @@ st.markdown("""
         margin-bottom: 4px;
     }
 
-    /* ── Section Headers ── */
     .sec-header {
         font-size: 1.15rem;
         font-weight: 700;
@@ -139,7 +136,6 @@ st.markdown("""
         border-radius: 2px;
     }
 
-    /* ── Info / Success / Warning Boxes ── */
     .box-info {
         background: linear-gradient(135deg, #EBF5FB, #D6EAF8);
         border-radius: 10px;
@@ -173,7 +169,6 @@ st.markdown("""
         font-size: 0.9rem;
     }
 
-    /* ── Prediction Result Card ── */
     .pred-card {
         background: linear-gradient(135deg, #EAFAF1, #D5F5E3);
         border-radius: 16px;
@@ -205,7 +200,6 @@ st.markdown("""
         color: #888;
     }
 
-    /* ── Loading Overlay ── */
     .loading-text {
         text-align: center;
         color: #C0392B;
@@ -214,7 +208,6 @@ st.markdown("""
         padding: 20px;
     }
 
-    /* ── Tab Styling ── */
     .stTabs [data-baseweb="tab-list"] {
         gap: 4px;
         background: #f8f9fa;
@@ -228,7 +221,6 @@ st.markdown("""
         font-size: 0.88rem;
     }
 
-    /* ── Sidebar ── */
     [data-testid="stSidebar"] {
         background: linear-gradient(180deg, #1a0a0a 0%, #2c1515 100%);
     }
@@ -239,7 +231,6 @@ st.markdown("""
         background: rgba(192,57,43,0.3) !important;
     }
 
-    /* ── Divider ── */
     .fancy-divider {
         height: 2px;
         background: linear-gradient(90deg, #C0392B, transparent);
@@ -248,7 +239,6 @@ st.markdown("""
         margin: 20px 0;
     }
 
-    /* ── Model Badge ── */
     .model-badge {
         display: inline-block;
         background: #C0392B;
@@ -406,7 +396,6 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 # ══════════════════════════════════════════════════════════════════════════════
 with tab1:
 
-    # KPI Cards
     st.markdown(f"""
     <div class="kpi-grid">
         <div class="kpi-card">
@@ -439,15 +428,12 @@ with tab1:
         st.dataframe(df_raw.describe(include='all').T.round(3), use_container_width=True)
 
     st.markdown('<hr class="fancy-divider">', unsafe_allow_html=True)
-
-    # Distribusi Rating
     st.markdown('<p class="sec-header">Distribusi Target — Rating Produk</p>', unsafe_allow_html=True)
 
     col_a, col_b = st.columns(2)
-
     with col_a:
         fig, ax = plt.subplots(figsize=(7, 4))
-        n, bins, patches = ax.hist(data['rating'], bins=20, color='#C0392B', edgecolor='white', alpha=0.85)
+        ax.hist(data['rating'], bins=20, color='#C0392B', edgecolor='white', alpha=0.85)
         ax.axvline(data['rating'].mean(),   color='#2E86C1', linestyle='--', lw=2, label=f"Mean = {data['rating'].mean():.2f}")
         ax.axvline(data['rating'].median(), color='#F39C12', linestyle='--', lw=2, label=f"Median = {data['rating'].median():.2f}")
         ax.set_title('Distribusi Rating Produk')
@@ -475,12 +461,9 @@ with tab1:
     col_e.metric("📈 Rating Maks",   f"{data['rating'].max():.1f}")
 
     st.markdown('<hr class="fancy-divider">', unsafe_allow_html=True)
-
-    # Top Brands
     st.markdown('<p class="sec-header">Top 15 Brand — Jumlah Produk & Avg Rating</p>', unsafe_allow_html=True)
 
     col_f, col_g = st.columns(2)
-
     with col_f:
         top15 = df_raw['brand'].value_counts().head(15)
         fig, ax = plt.subplots(figsize=(7, 5))
@@ -506,17 +489,12 @@ with tab1:
         st.pyplot(fig); plt.close()
 
     st.markdown('<hr class="fancy-divider">', unsafe_allow_html=True)
-
-    # Heatmap Korelasi
     st.markdown('<p class="sec-header">Korelasi Fitur Numerik vs Rating</p>', unsafe_allow_html=True)
 
     num_cols = ['harga_jual_avg', 'harga_asli_avg', 'pct_diskon',
                 'jumlah_size', 'nama_len', 'selisih_harga', 'rasio_diskon', 'rating']
     corr = data[num_cols].corr()
-
     fig, ax = plt.subplots(figsize=(10, 6))
-    mask = np.zeros_like(corr, dtype=bool)
-    np.fill_diagonal(mask, True)
     sns.heatmap(
         corr, annot=True, fmt='.2f', cmap='RdYlGn', center=0,
         ax=ax, linewidths=0.5, linecolor='white',
@@ -527,8 +505,6 @@ with tab1:
     st.pyplot(fig); plt.close()
 
     st.markdown('<hr class="fancy-divider">', unsafe_allow_html=True)
-
-    # Scatter Plots
     st.markdown('<p class="sec-header">Scatter — Rating vs Harga & Diskon</p>', unsafe_allow_html=True)
 
     col_h, col_i = st.columns(2)
@@ -580,7 +556,6 @@ with tab2:
     mi_s = pd.Series(mi, index=FEATURE_COLS).sort_values()
 
     col_mi_a, col_mi_b = st.columns([3, 1])
-
     with col_mi_a:
         fig, ax = plt.subplots(figsize=(9, 4))
         colors_mi = plt.cm.Purples(np.linspace(0.35, 0.9, len(mi_s)))
@@ -631,7 +606,6 @@ with tab3:
                 X, y, test_size=test_size, random_state=42
             )
 
-            # Target Encoding (train only — anti leakage)
             global_mean     = y_train.mean()
             brand_mean_tr   = y_train.groupby(X_train['brand']).mean()
             X_train['brand_avg_rating'] = X_train['brand'].map(brand_mean_tr).fillna(global_mean)
@@ -674,7 +648,6 @@ with tab3:
 
             result = pd.DataFrame(rows).sort_values('MAE Test').reset_index(drop=True)
 
-            # Hyperparameter Tuning (opsional)
             best_params = None
             if run_tuning:
                 st.info("🔧 Menjalankan GridSearchCV pada Gradient Boosting...")
@@ -696,7 +669,6 @@ with tab3:
             else:
                 best_model = trained['Gradient Boosting']
 
-            # Save to session state
             st.session_state.update({
                 'result'      : result,
                 'trained'     : trained,
@@ -732,18 +704,13 @@ with tab3:
         """, unsafe_allow_html=True)
 
         st.markdown('<p class="sec-header">Tabel Perbandingan Model</p>', unsafe_allow_html=True)
-
-        styled = result.round(4).style\
-            .background_gradient(subset=['MAE Test', 'RMSE Test'], cmap='Reds')\
-            .background_gradient(subset=['R² Test'], cmap='Greens')\
-            .set_properties(**{'font-size': '13px'})
         st.dataframe(result.round(4), use_container_width=True, hide_index=True)
 
         st.markdown('<hr class="fancy-divider">', unsafe_allow_html=True)
         st.markdown('<p class="sec-header">Visualisasi Perbandingan Metrik</p>', unsafe_allow_html=True)
 
         fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-        metrics = ['MAE Test', 'RMSE Test', 'R² Test']
+        metrics  = ['MAE Test', 'RMSE Test', 'R² Test']
         palettes = ['#C0392B', '#E67E22', '#27AE60']
         for ax, met, pal in zip(axes, metrics, palettes):
             vals   = result.set_index('Model')[met]
@@ -798,7 +765,6 @@ with tab4:
             </div>
             """, unsafe_allow_html=True)
 
-        # KPI Metrics
         st.markdown(f"""
         <div class="kpi-grid">
             <div class="kpi-card">
@@ -829,7 +795,6 @@ with tab4:
         col_tr2.metric("RMSE Train", f"{rmse_train:.4f}", delta=f"{rmse_test-rmse_train:+.4f} gap")
         col_tr3.metric("R² Train",   f"{r2_train:.4f}",   delta=f"{r2_test-r2_train:+.4f} gap")
 
-        # Overfitting Analysis
         gap = r2_train - r2_test
         if gap > 0.3:
             box_cls, msg = "box-error",   "⚠️ Indikasi OVERFITTING kuat — gap R² > 0.3"
@@ -844,8 +809,6 @@ with tab4:
         st.markdown(f'<div class="{box_cls}">{msg}<br>{better_msg}</div>', unsafe_allow_html=True)
 
         st.markdown('<hr class="fancy-divider">', unsafe_allow_html=True)
-
-        # Aktual vs Prediksi
         st.markdown('<p class="sec-header">Aktual vs Prediksi & Distribusi Residual</p>', unsafe_allow_html=True)
 
         col_p, col_r = st.columns(2)
@@ -876,7 +839,6 @@ with tab4:
 
         st.markdown('<hr class="fancy-divider">', unsafe_allow_html=True)
 
-        # Feature Importance
         if hasattr(best_model, 'feature_importances_'):
             st.markdown('<p class="sec-header">Feature Importance — Gradient Boosting</p>', unsafe_allow_html=True)
 
@@ -930,55 +892,92 @@ with tab5:
     else:
         st.markdown("""
         <div class="box-info">
-        💡 Masukkan detail produk skincare di bawah ini untuk memprediksi rating-nya menggunakan model Gradient Boosting yang telah dilatih.
+        💡 Pilih produk dari dataset, atau isi manual untuk produk baru yang belum ada di dataset.
         </div>
         """, unsafe_allow_html=True)
 
-        col1, col2 = st.columns(2, gap="large")
+        mode = st.radio(
+            "Mode Input",
+            ["📦 Pilih dari Dataset", "✏️ Isi Manual"],
+            horizontal=True
+        )
 
-        with col1:
-            st.markdown("**💰 Informasi Harga**")
-            harga_jual  = st.number_input("Harga Jual (Rp)", min_value=0, value=80_000, step=5_000, format="%d")
-            harga_asli  = st.number_input("Harga Asli (Rp)", min_value=0, value=100_000, step=5_000, format="%d")
-            pct_diskon  = st.number_input("Persentase Diskon (%)", min_value=0.0, max_value=100.0, value=20.0, step=1.0)
-            jumlah_size = st.number_input("Jumlah Varian Ukuran", min_value=1, max_value=20, value=1)
+        scaler      = st.session_state['scaler']
+        best_model  = st.session_state['best_model']
+        brand_mean  = st.session_state['brand_mean']
+        global_mean = st.session_state['global_mean']
 
-        with col2:
-            st.markdown("**🏷️ Informasi Produk**")
-            nama_produk       = st.text_input("Nama Produk", value="Moisturizer Hyaluronic Acid 50ml")
-            brand_input       = st.text_input("Brand", value="COSRX")
-            brand_count_input = st.number_input("Jumlah Produk Brand Ini (di dataset)", min_value=1, value=20)
+        # Default values
+        harga_jual_val  = 80_000
+        harga_asli_val  = 100_000
+        pct_diskon_val  = 20.0
+        jumlah_size_val = 1
+        nama_val        = "Moisturizer Hyaluronic Acid 50ml"
+        brand_val       = "COSRX"
+        brand_count_val = 20
+
+        if mode == "📦 Pilih dari Dataset":
+            produk_options = sorted(data['nama_produk'].dropna().unique().tolist())
+            selected_produk = st.selectbox("🔍 Cari & Pilih Produk", options=produk_options)
+
+            row = data[data['nama_produk'] == selected_produk].iloc[0]
+            harga_jual_val  = float(row['harga_jual_avg'])
+            harga_asli_val  = float(row['harga_asli_avg'])
+            pct_diskon_val  = float(row['pct_diskon'])
+            jumlah_size_val = int(row['jumlah_size']) if 'jumlah_size' in row else 1
+            nama_val        = selected_produk
+            brand_val       = str(row['brand'])
+            brand_count_val = int(row['brand_count'])
+
+            st.markdown(f"""
+            <div class="box-success">
+            📋 <b>Produk dipilih:</b> {selected_produk}<br>
+            🏷️ Brand: <b>{brand_val}</b> &nbsp;|&nbsp;
+            💰 Harga Jual: <b>Rp {harga_jual_val:,.0f}</b> &nbsp;|&nbsp;
+            🏷️ Harga Asli: <b>Rp {harga_asli_val:,.0f}</b> &nbsp;|&nbsp;
+            🔖 Diskon: <b>{pct_diskon_val:.0f}%</b>
+            </div>
+            """, unsafe_allow_html=True)
+
+        else:
+            col1, col2 = st.columns(2, gap="large")
+            with col1:
+                st.markdown("**💰 Informasi Harga**")
+                harga_jual_val  = st.number_input("Harga Jual (Rp)", min_value=0, value=80_000, step=5_000, format="%d")
+                harga_asli_val  = st.number_input("Harga Asli (Rp)", min_value=0, value=100_000, step=5_000, format="%d")
+                pct_diskon_val  = st.number_input("Persentase Diskon (%)", min_value=0.0, max_value=100.0, value=20.0, step=1.0)
+                jumlah_size_val = st.number_input("Jumlah Varian Ukuran", min_value=1, max_value=20, value=1)
+            with col2:
+                st.markdown("**🏷️ Informasi Produk**")
+                nama_val        = st.text_input("Nama Produk", value="Moisturizer Hyaluronic Acid 50ml")
+                brand_val       = st.text_input("Brand", value="COSRX")
+                brand_count_val = st.number_input("Jumlah Produk Brand Ini (di dataset)", min_value=1, value=20)
 
         st.markdown("<br>", unsafe_allow_html=True)
         pred_btn = st.button("🔮 Prediksi Rating Sekarang", type="primary", use_container_width=True)
 
         if pred_btn:
-            scaler      = st.session_state['scaler']
-            best_model  = st.session_state['best_model']
-            brand_mean  = st.session_state['brand_mean']
-            global_mean = st.session_state['global_mean']
-
-            selisih   = harga_asli - harga_jual
-            rasio     = harga_jual / harga_asli if harga_asli > 0 else 1.0
-            nama_len  = len(nama_produk)
-            brand_avg = float(brand_mean.get(brand_input, global_mean))
+            selisih   = harga_asli_val - harga_jual_val
+            rasio     = harga_jual_val / harga_asli_val if harga_asli_val > 0 else 1.0
+            nama_len  = len(nama_val)
+            brand_avg = float(brand_mean.get(brand_val, global_mean))
 
             inp = np.array([[
-                harga_jual, harga_asli, pct_diskon,
-                selisih, rasio, jumlah_size,
-                nama_len, brand_count_input, brand_avg
+                harga_jual_val, harga_asli_val, pct_diskon_val,
+                selisih, rasio, jumlah_size_val,
+                nama_len, brand_count_val, brand_avg
             ]])
             inp_scaled = scaler.transform(inp)
             pred       = float(np.clip(best_model.predict(inp_scaled)[0], 2.6, 5.0))
             star_str   = stars(pred)
-            brand_note = "(brand dikenal)" if brand_input in brand_mean.index else "(brand baru — menggunakan rata-rata global)"
+            brand_note = "(brand dikenal)" if brand_val in brand_mean.index else "(brand baru — menggunakan rata-rata global)"
 
             st.markdown(f"""
             <div class="pred-card">
-                <div class="pred-label">✨ Prediksi Rating untuk <b>{nama_produk}</b></div>
+                <div class="pred-label">✨ Prediksi Rating untuk <b>{nama_val}</b></div>
                 <div class="pred-value">⭐ {pred:.2f}</div>
                 <div class="pred-stars">{star_str}</div>
-                <div class="pred-brand">Brand: <b>{brand_input}</b> {brand_note}</div>
+                <div class="pred-brand">Brand: <b>{brand_val}</b> {brand_note}</div>
             </div>
             """, unsafe_allow_html=True)
 
@@ -986,8 +985,9 @@ with tab5:
                 detail_df = pd.DataFrame({
                     'Fitur'      : FEATURE_COLS + ['brand_avg_rating'],
                     'Nilai Input': [
-                        harga_jual, harga_asli, pct_diskon, selisih, rasio,
-                        jumlah_size, nama_len, brand_count_input, brand_avg
+                        harga_jual_val, harga_asli_val, pct_diskon_val,
+                        selisih, rasio, jumlah_size_val,
+                        nama_len, brand_count_val, brand_avg
                     ]
                 })
                 st.dataframe(detail_df.round(4), use_container_width=True, hide_index=True)
